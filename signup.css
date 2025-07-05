@@ -1,0 +1,95 @@
+/* Background setup */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-image: url('pic2.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Signup box */
+.auth-box {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 30px;
+  width: 100%;
+  max-width: 360px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.auth-box h2 {
+  text-align: center;
+  margin-bottom: 24px;
+  color: #cda6ff;
+  text-shadow: 0 0 4px #f1eff3, 0 0 8px #c8bfd7;
+}
+
+.auth-box form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.auth-box input[type="text"],
+.auth-box input[type="password"] {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  background: transparent;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+}
+
+.auth-box input::placeholder {
+  color: #ccc;
+}
+
+.auth-box button {
+  width: 100%;
+  padding: 14px;
+  font-size: 1rem;
+  background: #ffffffcc;
+  color: #000;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.auth-box button:hover {
+  background: #fff;
+}
+
+.auth-box .links {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 0.9em;
+}
+
+.auth-box .links a {
+  color: #ccc;
+  text-decoration: none;
+}
+
+.auth-box .links a:hover {
+  text-decoration: underline;
+}
+
+#msg {
+  text-align: center;
+  margin-top: 10px;
+  font-weight: bold;
+}

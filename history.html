@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz History</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: white;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #444;
+      text-align: left;
+    }
+
+    th {
+      background-color: #222;
+    }
+
+    tr:nth-child(even) {
+      background-color: #1b1b1b;
+    }
+
+    .no-history {
+      text-align: center;
+      margin-top: 40px;
+      color: #ccc;
+    }
+
+    #home-btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #00bfff;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #home-btn:hover {
+      background-color: #0090c8;
+    }
+  </style>
+</head>
+<body>
+  <h2>Your Quiz History</h2>
+  <div id="history-section"></div>
+  <button id="home-btn" onclick="goHome()">Back to Home</button>
+
+  <script>
+    const username = localStorage.getItem('loggedInUser');
+    const container = document.getElementById('history-section');
+
+    if (!username) {
+      container.innerHTML = `<p class="no-history">You are not logged in.</p>`;
+    } else {
+      const historyKey = `history_${username}`;
+      const history = JSON.parse(localStorage.getItem(historyKey)) || [];
+
+      if (history.length === 0) {
+        container.innerHTML = `<p class="no-history">No quiz history found for ${username}.</p>`;
+      } else {
+        const table = document.createElement('table');
+        table.innerHTML = `
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Score</th>
+              <th>Total Questions</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${history.map((item, i) => `
+              <tr>
+                <td>${i + 1}</td>
+                <td>${item.score}</td>
+                <td>${item.total}</td>
+                <td>${item.time}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        `;
+        container.appendChild(table);
+      }
+    }
+
+    function goHome() {
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>

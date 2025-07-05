@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="signup.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <div class="auth-box">
+    <h2>Sign Up</h2>
+    <form id="signupForm">
+      <input type="text" id="username" placeholder="Username" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button type="submit">Sign Up</button>
+    </form>
+    <p id="msg"></p>
+  </div>
+
+  <script>
+    async function hashPassword(password) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(password);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    document.getElementById('signupForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const msg = document.getElementById('msg');
+
+      let users = JSON.parse(localStorage.getItem('users')) || [];
+      const exists = users.find(user => user.username === username);
+      if (exists) {
+        msg.textContent = 'Username already exists.';
+        msg.style.color = 'red';
+        return;
+      }
+
+      const hashedPassword = await hashPassword(password);
+      users.push({ username, password: hashedPassword });
+      localStorage.setItem('users', JSON.stringify(users));
+
+      msg.textContent = 'Registration successful! Redirecting...';
+      msg.style.color = 'green';
+      setTimeout(() => window.location.href = 'login.html', 2000);
+    });
+  </script>
+</body>
+</html>

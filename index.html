@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HSC Quiz Portal</title>
+  <link rel="stylesheet" href="index.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">
+      <a href="index.html">
+        <img src="logo.png" alt="HSC Logo">
+      </a>
+    </div>
+    <div class="nav-links" id="nav-links"></div>
+  </nav>
+
+  <main class="home-content">
+    <h1>Welcome to HSC Software Engineering Quiz</h1>
+    <p>Practice and improve with randomized questions before your exam!</p>
+    <button id="start-quiz-btn" style="display: none;" onclick="startQuiz()">Start Quiz</button>
+  </main>
+
+  <script>
+    const navLinks = document.getElementById("nav-links");
+    const quizBtn = document.getElementById("start-quiz-btn");
+    const username = localStorage.getItem("loggedInUser");
+
+    if (username) {
+      const streak = localStorage.getItem(`streak_${username}`) || 0;
+      navLinks.innerHTML = `
+        <span class="greeting">Hi, ${username}</span>
+        <span class="streak">🔥 Streak: ${streak}</span>
+        <a href="index.html">Home</a>
+        <a href="history.html">History</a>
+        <a href="#" onclick="logout()">Logout</a>
+      `;
+      quizBtn.style.display = "inline-block";
+    } else {
+      navLinks.innerHTML = `
+        <a href="index.html">Home</a>
+        <a href="login.html">Login</a>
+        <a href="signup.html">Sign Up</a>
+      `;
+    }
+
+    function logout() {
+      localStorage.removeItem("loggedInUser");
+      window.location.href = "index.html";
+    }
+
+    function startQuiz() {
+      window.location.href = "quiz.html";
+    }
+  </script>
+</body>
+</html>

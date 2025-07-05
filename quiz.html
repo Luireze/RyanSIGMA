@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Quiz</title>
+  <link rel="stylesheet" href="quiz.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+  <h2>Quiz</h2>
+  <p id="timer">Time left: <span id="time">180</span>s</p>
+  <div id="quiz-container"></div>
+  <button id="submit-btn">Submit</button>
+  <p id="result"></p>
+  <button id="home-btn" style="display: none;">Go Back to Home</button>
+
+  <script>
+    const fullQuestionBank = [
+      { question: "Which phase in the Secure SDLC involves identifying security requirements?", options: ["Design", "Testing", "Requirement analysis", "Maintenance"], answer: 2 },
+      { question: "What is the main purpose of threat modeling in software development?", options: ["Fix bugs", "Increase speed", "Identify security risks", "Improve UI"], answer: 2 },
+      { question: "Which of the following ensures that code adheres to security best practices?", options: ["Unit testing", "Secure coding guidelines", "Code formatting", "Automation tools"], answer: 1 },
+      { question: "Input validation is important because it helps prevent:", options: ["System crashes", "Code reuse", "Injection attacks", "User logout"], answer: 2 },
+      { question: "What is a common tool used to detect vulnerabilities during development?", options: ["Selenium", "Visual Studio Code", "Static code analysis tool", "Figma"], answer: 2 },
+      { question: "Secure coding means:", options: ["Writing short code", "Using AI to write code", "Minimizing security risks in code", "Using modern languages"], answer: 2 },
+      { question: "What is the purpose of using authentication in software systems?", options: ["Prevent data loss", "Speed up code", "Verify user identity", "Improve layout"], answer: 2 },
+      { question: "What is least privilege principle?", options: ["Allowing all access", "Denying all users", "Giving minimum access needed", "Removing admin roles"], answer: 2 },
+      { question: "Which method helps protect data in transit?", options: ["Firewall", "Encryption", "Tokenization", "Compression"], answer: 1 },
+      { question: "A secure PWA should:", options: ["Use HTTP", "Store all data in cookies", "Implement HTTPS and service workers", "Avoid using JavaScript"], answer: 2 },
+      { question: "Penetration testing is used to:", options: ["Enhance graphics", "Find security flaws", "Write documentation", "Add more features"], answer: 1 },
+      { question: "Which header helps prevent clickjacking?", options: ["Content-Type", "X-Frame-Options", "Access-Control", "Referrer-Policy"], answer: 1 },
+      { question: "Code obfuscation is used to:", options: ["Make code readable", "Improve performance", "Hide logic from attackers", "Add comments"], answer: 2 },
+      { question: "Which of the following is a secure authentication method?", options: ["Plain password", "OAuth 2.0", "URL tokens", "User IP"], answer: 1 },
+      { question: "Why should you avoid storing passwords in plain text?", options: ["Wastes memory", "Slows login", "Security risk if breached", "Takes too much space"], answer: 2 },
+      { question: "What does HTML stand for?", options: ["Hyper Trainer Marking Language", "Hyper Text Markup Language", "Hyper Text Markdown Language", "None of the above"], answer: 1 },
+      { question: "Which tag is used to insert JavaScript into HTML?", options: ["js", "javascript", "script", "code"], answer: 2 },
+      { question: "Which CSS property is used for layout grids?", options: ["flex", "float", "display", "grid"], answer: 3 },
+      { question: "A RESTful API uses which protocol?", options: ["FTP", "HTTP", "SMTP", "SSH"], answer: 1 },
+      { question: "Which one is a front-end technology?", options: ["Node.js", "React", "MongoDB", "Express"], answer: 1 },
+      { question: "Which one is used for back-end development?", options: ["Vue", "React", "Express.js", "CSS"], answer: 2 },
+      { question: "What does PWA stand for?", options: ["Public Web App", "Progressive Web App", "Private Web Access", "Protected Web Application"], answer: 1 },
+      { question: "Which tool is used to inspect web elements?", options: ["DevTools", "Git", "Docker", "npm"], answer: 0 },
+      { question: "HTTPS provides:", options: ["Faster load speed", "Encryption", "Font styling", "Debug logs"], answer: 1 },
+      { question: "CORS is a policy used to:", options: ["Style content", "Secure APIs", "Cache data", "Optimize loading"], answer: 1 },
+      { question: "Which storage method works offline in PWAs?", options: ["Cookies", "IndexedDB", "SessionStorage", "Localhost"], answer: 1 },
+      { question: "Which tag is used to create a hyperlink in HTML?", options: ["link", "a", "url", "href"], answer: 1 },
+      { question: "What is the main advantage of a PWA?", options: ["Looks cooler", "Faster code", "Works offline and is installable", "Runs on Linux only"], answer: 2 },
+      { question: "Which protocol encrypts data over the web?", options: ["FTP", "HTTP", "HTTPS", "SMTP"], answer: 2 },
+      { question: "JavaScript runs:", options: ["Only server", "Only database", "Browser and server", "Compiler only"], answer: 2 },
+      { question: "What is software automation?", options: ["Typing faster", "Manual testing", "Using tools to perform tasks automatically", "Debugging"], answer: 2 },
+      { question: "Which of the following is a supervised ML algorithm?", options: ["K-Means", "Linear Regression", "PCA", "Word2Vec"], answer: 1 },
+      { question: "MLOps combines machine learning with:", options: ["Graphics", "DevOps", "Web design", "HTML"], answer: 1 },
+      { question: "Neural networks are inspired by:", options: ["Bones", "Muscles", "The brain", "Memory"], answer: 2 },
+      { question: "Which algorithm uses decision paths?", options: ["SVM", "Naive Bayes", "Decision Trees", "CNN"], answer: 2 },
+      { question: "Bias in AI can lead to:", options: ["Faster training", "Unfair results", "Better results", "No change"], answer: 1 },
+      { question: "What is an epoch in ML training?", options: ["Time zone", "Hardware", "One full pass through the data", "Loop"], answer: 2 },
+      { question: "Polynomial regression is used when:", options: ["Data is linear", "Data is random", "Data is non-linear", "Data is missing"], answer: 2 },
+      { question: "Which model is best for image recognition?", options: ["Decision Tree", "CNN", "LSTM", "Bayes"], answer: 1 },
+      { question: "Overfitting means:", options: ["Model too simple", "Model performs poorly", "Model learns noise", "Model is random"], answer: 2 },
+
+
+
+      // Add 30 more dummy questions below or duplicate with slight changes
+    ];
+
+    // Duplicate and modify slightly to simulate 40 unique questions
+    while (fullQuestionBank.length < 40) {
+      fullQuestionBank.push({
+        question: `Sample question ${fullQuestionBank.length + 1}?`,
+        options: ["Option A", "Option B", "Option C", "Option D"],
+        answer: Math.floor(Math.random() * 4)
+      });
+    }
+
+    const selectedQuestions = fullQuestionBank
+      .sort(() => 0.5 - Math.random())
+      .slice(0, 15); // Pick 15 random questions
+
+    const quizContainer = document.getElementById('quiz-container');
+    const submitBtn = document.getElementById('submit-btn');
+    const result = document.getElementById('result');
+    const homeBtn = document.getElementById('home-btn');
+    const timerSpan = document.getElementById('time');
+    let timeLeft = 180;
+    let submitted = false;
+
+    function loadQuiz() {
+      selectedQuestions.forEach((q, index) => {
+        const questionDiv = document.createElement('div');
+        questionDiv.classList.add('question');
+        questionDiv.innerHTML = `<p>${index + 1}. ${q.question}</p>`;
+        const optionsDiv = document.createElement('div');
+        optionsDiv.classList.add('options');
+        q.options.forEach((option, i) => {
+          const label = document.createElement('label');
+          label.innerHTML = `<input type="radio" name="question${index}" value="${i}"> ${option}`;
+          optionsDiv.appendChild(label);
+        });
+        questionDiv.appendChild(optionsDiv);
+        quizContainer.appendChild(questionDiv);
+      });
+    }
+
+    function startTimer() {
+      const timer = setInterval(() => {
+        if (timeLeft > 0) {
+          timeLeft--;
+          timerSpan.textContent = timeLeft;
+        } else {
+          clearInterval(timer);
+          if (!submitted) {
+            handleSubmit();
+          }
+        }
+      }, 1000);
+    }
+
+    function handleSubmit() {
+      submitted = true;
+      let score = 0;
+      selectedQuestions.forEach((q, index) => {
+        const selected = document.querySelector(`input[name="question${index}"]:checked`);
+        if (selected && parseInt(selected.value) === q.answer) {
+          score++;
+        }
+      });
+      result.textContent = `You scored ${score} out of ${selectedQuestions.length}.`;
+      homeBtn.style.display = 'inline';
+    }
+    function handleSubmit() {
+      submitted = true;
+      let score = 0;
+      selectedQuestions.forEach((q, index) => {
+        const selected = document.querySelector(`input[name="question${index}"]:checked`);
+        if (selected && parseInt(selected.value) === q.answer) {
+          score++;
+        }
+      });
+
+      const username = localStorage.getItem('loggedInUser') || 'Guest';
+      const total = selectedQuestions.length;
+      const timestamp = new Date().toLocaleString();
+      const historyKey = `history_${username}`;
+      const history = JSON.parse(localStorage.getItem(historyKey)) || [];
+      history.push({ score, total, time: timestamp });
+      localStorage.setItem(historyKey, JSON.stringify(history));
+      updateStreak(username); // Track daily streak
+
+      result.textContent = `You scored ${score} out of ${total}. Your result has been saved.`;
+      homeBtn.style.display = 'inline';
+    }
+    // 🔥 Daily Streak System
+    function updateStreak(username) {
+      const today = new Date().toDateString();
+      const streakKey = `streak_${username}`;
+      const lastDateKey = `lastQuiz_${username}`;
+      const lastDate = localStorage.getItem(lastDateKey);
+      let streak = parseInt(localStorage.getItem(streakKey)) || 0;
+
+      if (lastDate === today) return;
+
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+
+      if (lastDate === yesterday.toDateString()) {
+        streak++;
+      } else {
+        streak = 1;
+      }
+
+      localStorage.setItem(lastDateKey, today);
+      localStorage.setItem(streakKey, streak);
+    }
+    submitBtn.addEventListener('click', handleSubmit);
+    homeBtn.addEventListener('click', () => {
+      window.location.href = 'index.html';
+    });
+
+    loadQuiz();
+    startTimer();
+  </script>
+</body>
+
+</html>
