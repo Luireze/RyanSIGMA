@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Quiz History</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
+  <style>/* Basic interface and background color */
     body {
       font-family: Arial, sans-serif;
       background-color: #111;
@@ -60,23 +60,23 @@
 </head>
 <body>
   <h2>Your Quiz History</h2>
-  <div id="history-section"></div>
+  <div id="history-section"></div><!--Where the history table will be displayed-->
   <button id="home-btn" onclick="goHome()">Back to Home</button>
 
-  <script>
+  <script>// Get logged in username
     const username = localStorage.getItem('loggedInUser');
     const container = document.getElementById('history-section');
-
+// If not logged in, display message
     if (!username) {
       container.innerHTML = `<p class="no-history">You are not logged in.</p>`;
     } else {
-      const historyKey = `history_${username}`;
+      const historyKey = `history_${username}`;// Get history by username
       const history = JSON.parse(localStorage.getItem(historyKey)) || [];
 
       if (history.length === 0) {
-        container.innerHTML = `<p class="no-history">No quiz history found for ${username}.</p>`;
+        container.innerHTML = `<p class="no-history">No quiz history found for ${username}.</p>`;// If there is no data, display a message
       } else {
-        const table = document.createElement('table');
+        const table = document.createElement('table');// Create a history display table
         table.innerHTML = `
           <thead>
             <tr>
@@ -100,7 +100,7 @@
         container.appendChild(table);
       }
     }
-
+// Go back to home page
     function goHome() {
       window.location.href = 'index.html';
     }
